@@ -44,6 +44,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
+    "@google-cloud/text-to-speech": "^5.5.0",
     "@google/generative-ai": "^0.14.1",
     "@nowpaymentsio/nowpayments-api-js": "^1.0.5",
     "@prisma/client": "^5.2.0",

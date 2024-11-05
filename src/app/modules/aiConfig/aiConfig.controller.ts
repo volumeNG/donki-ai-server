@@ -10,6 +10,7 @@ import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { TAskedData, TMessage } from './aiConfig.interface';
 import { AiConfigService } from './aiConfig.service';
+
 const openai = new OpenAI({
   apiKey: config.openAiApi, // Load API key from .env
 });
@@ -136,6 +137,33 @@ const getSingleAiConfig: RequestHandler = catchAsync(
     });
   }
 );
+const getAudio: RequestHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const { text, voice = 'shimmer' } = req.body;
+    console.log({ text });
+    try {
+      // Generate the complete audio file
+      const audioResponse = await openai.audio.speech.create({
+        model: 'tts-1',
+        voice,
+        input: text,
+      });
+
+      // Convert the audio response to a buffer
+      const audioBuffer = Buffer.from(await audioResponse.arrayBuffer());
+
+      // Set headers for audio response
+      res.setHeader('Content-Type', 'audio/mpeg');
+      res.setHeader('Content-Disposition', 'attachment; filename="speech.mp3"');
+
+      // Send the audio buffer as a single response
+      res.send(audioBuffer);
+    } catch (error) {
+      console.error('Error generating audio:', error);
+      res.status(500).send({ error: 'Failed to generate audio' });
+    }
+  }
+);
 const increaseTruthfulCount: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     const result = await AiConfigService.increaseTruthfulCount();
@@ -164,6 +192,7 @@ const updateAiConfig: RequestHandler = catchAsync(
     });
   }
 );
+
 const deleteAiConfig: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     const result = await AiConfigService.deleteAiConfig();
@@ -185,4 +214,5 @@ export const AiConfigController = {
   deleteAiConfig,
   increaseTruthfulCount,
   askedQuestion,
+  getAudio,
 };

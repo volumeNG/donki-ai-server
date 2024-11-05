@@ -140,6 +140,29 @@ const getSingleAiConfig = (0, catchAsync_1.default)((req, res) => __awaiter(void
         data: result,
     });
 }));
+const getAudio = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { text, voice = 'shimmer' } = req.body;
+    console.log({ text });
+    try {
+        // Generate the complete audio file
+        const audioResponse = yield openai.audio.speech.create({
+            model: 'tts-1',
+            voice,
+            input: text,
+        });
+        // Convert the audio response to a buffer
+        const audioBuffer = Buffer.from(yield audioResponse.arrayBuffer());
+        // Set headers for audio response
+        res.setHeader('Content-Type', 'audio/mpeg');
+        res.setHeader('Content-Disposition', 'attachment; filename="speech.mp3"');
+        // Send the audio buffer as a single response
+        res.send(audioBuffer);
+    }
+    catch (error) {
+        console.error('Error generating audio:', error);
+        res.status(500).send({ error: 'Failed to generate audio' });
+    }
+}));
 const increaseTruthfulCount = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield aiConfig_service_1.AiConfigService.increaseTruthfulCount();
     (0, sendResponse_1.default)(res, {
@@ -177,4 +200,5 @@ exports.AiConfigController = {
     deleteAiConfig,
     increaseTruthfulCount,
     askedQuestion,
+    getAudio,
 };

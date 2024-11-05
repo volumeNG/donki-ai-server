@@ -27,6 +27,7 @@ exports.default = {
     openAiApi: process.env.OPEN_AI_API,
     openAiAssistant_id: process.env.OPEN_AI_ASSISTANT_ID,
     googleAi: process.env.GOOGLE_AI,
+    openAiVoice: process.env.OPEN_AI_VOICE,
     captchaSiteKey: process.env.CAPTCHA_SITE_KEY,
     captchaSecretKey: process.env.CAPTCHA_SECRET_KEY,
 };

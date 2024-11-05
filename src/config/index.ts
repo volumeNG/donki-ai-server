@@ -25,7 +25,14 @@ export default {
   openAiApi: process.env.OPEN_AI_API as string,
   openAiAssistant_id: process.env.OPEN_AI_ASSISTANT_ID as string,
   googleAi: process.env.GOOGLE_AI as string,
-
+  openAiVoice: process.env.OPEN_AI_VOICE as
+    | 'shimmer'
+    | 'alloy'
+    | 'echo'
+    | 'fable'
+    | 'onyx'
+    | 'nova'
+    | undefined,
   captchaSiteKey: process.env.CAPTCHA_SITE_KEY,
   captchaSecretKey: process.env.CAPTCHA_SECRET_KEY,
 };
