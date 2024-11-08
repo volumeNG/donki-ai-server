@@ -66,16 +66,10 @@ const askedQuestion = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         };
         // Extract data from request
         const data = req.body;
-        // Define the chat request parameters
-        console.log({
-            model: (0, getModelByEnum_1.default)(adminMessage.aiModel) || 'gpt-4',
-            messages: [systemMessage, ...data.conversation],
-            stream: true, // Enable streaming
-        }, 'form api ');
         // Call the OpenAI API
         const completion = yield openai.chat.completions.create({
             model: (0, getModelByEnum_1.default)(adminMessage.aiModel) || 'gpt-4',
-            messages: [systemMessage, ...data.conversation],
+            messages: [systemMessage, ...data.conversation.slice(-3)],
             stream: true, // Enable streaming
         });
         // Set response headers for streaming
@@ -141,8 +135,8 @@ const getSingleAiConfig = (0, catchAsync_1.default)((req, res) => __awaiter(void
     });
 }));
 const getAudio = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { text, voice = 'shimmer' } = req.body;
-    console.log({ text });
+    const { text } = req.body;
+    const voice = config_1.default.openAiVoice || 'shimmer';
     try {
         // Generate the complete audio file
         const audioResponse = yield openai.audio.speech.create({

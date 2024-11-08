@@ -57,19 +57,10 @@ const askedQuestion: RequestHandler = catchAsync(async (req, res) => {
     // Extract data from request
     const data = req.body as TAskedData;
 
-    // Define the chat request parameters
-    console.log(
-      {
-        model: getAiModelValue(adminMessage.aiModel) || 'gpt-4',
-        messages: [systemMessage, ...data.conversation],
-        stream: true, // Enable streaming
-      },
-      'form api '
-    );
     // Call the OpenAI API
     const completion = await openai.chat.completions.create({
       model: getAiModelValue(adminMessage.aiModel) || 'gpt-4',
-      messages: [systemMessage, ...data.conversation],
+      messages: [systemMessage, ...data.conversation.slice(-3)],
       stream: true, // Enable streaming
     });
 
@@ -139,8 +130,9 @@ const getSingleAiConfig: RequestHandler = catchAsync(
 );
 const getAudio: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
-    const { text, voice = 'shimmer' } = req.body;
-    console.log({ text });
+    const { text } = req.body;
+    const voice: 'shimmer' | 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' =
+      config.openAiVoice || 'shimmer';
     try {
       // Generate the complete audio file
       const audioResponse = await openai.audio.speech.create({
