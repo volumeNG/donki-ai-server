@@ -16,8 +16,12 @@ router.get('/', aiConfig_controller_1.AiConfigController.getAllAiConfig);
 router.post('/asked', 
 // validateRequest(AiConfigValidation.askedValidation),
 verifyRecaptch_1.default, uploadPdf_1.default, aiConfig_controller_1.AiConfigController.askedQuestion);
+router.post('/mobile/asked', 
+// validateRequest(AiConfigValidation.askedValidation),
+uploadPdf_1.default, aiConfig_controller_1.AiConfigController.askedQuestion);
 router.post('/increase-untruthful-count', aiConfig_controller_1.AiConfigController.increaseTruthfulCount);
 router.post('/get-audio', verifyRecaptch_1.default, aiConfig_controller_1.AiConfigController.getAudio);
+router.post('/mobile/get-audio', aiConfig_controller_1.AiConfigController.getAudio);
 router.post('/', (0, auth_1.default)(), (0, validateRequest_1.default)(aiConfig_validation_1.AiConfigValidation.createValidation), aiConfig_controller_1.AiConfigController.createAiConfig);
 router.patch('/', (0, auth_1.default)(), (0, validateRequest_1.default)(aiConfig_validation_1.AiConfigValidation.updateValidation), aiConfig_controller_1.AiConfigController.updateAiConfig);
 router.delete('/', (0, auth_1.default)(), aiConfig_controller_1.AiConfigController.deleteAiConfig);

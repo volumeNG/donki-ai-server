@@ -16,10 +16,17 @@ router.post(
   AiConfigController.askedQuestion
 );
 router.post(
+  '/mobile/asked',
+  // validateRequest(AiConfigValidation.askedValidation),
+  uploadPdfFile,
+  AiConfigController.askedQuestion
+);
+router.post(
   '/increase-untruthful-count',
   AiConfigController.increaseTruthfulCount
 );
 router.post('/get-audio', verifyRecaptcha, AiConfigController.getAudio);
+router.post('/mobile/get-audio', AiConfigController.getAudio);
 
 router.post(
   '/',
